@@ -29,7 +29,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )
                 .oauth2Login(oauth2Login -> oauth2Login
-                        .loginPage("/public/homepage")
+                        .loginPage("/login")
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
                                 .userService(socialAppService))
                         .defaultSuccessUrl("/profile/user")
@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("/public/homepage")
                 );
         return http.build();
     }

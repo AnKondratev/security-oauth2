@@ -32,20 +32,20 @@ public class SocialAppService implements OAuth2UserService<OAuth2UserRequest, OA
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        String email = oAuth2User.getAttribute("email");
+        Integer githubId = oAuth2User.getAttribute("id");
         String username = oAuth2User.getAttribute("name");
 
-        Users user = userRepository.findByEmail(email);
+        Users user = userRepository.findByUsername(username);
         if (user == null) {
             user = Users.builder()
                     .username(username)
-                    .email(email)
+                    .githubId(githubId)
                     .role("USER")
                     .build();
             userRepository.save(user);
             logger.info("New user created: {}", username);
         } else {
-            logger.info("User already exists: {}", email);
+            logger.info("User already exists: {}", username);
         }
 
         Set<GrantedAuthority> authorities = new HashSet<>();

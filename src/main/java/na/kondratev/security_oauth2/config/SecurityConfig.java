@@ -22,7 +22,7 @@ public class SecurityConfig {
                                 "/error",
                                 "/public/homepage").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers("/user_access/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .loginPage("/public/homepage")
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
                                 .userService(socialAppService))
-                        .defaultSuccessUrl("/user")
+                        .defaultSuccessUrl("/profile/user")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")

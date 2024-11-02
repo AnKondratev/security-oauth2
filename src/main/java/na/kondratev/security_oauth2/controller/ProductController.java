@@ -19,11 +19,10 @@ public class ProductController {
         return ResponseEntity.ok(productRepository.findAll());
     }
 
-    @GetMapping("/public/homepage")
+    @GetMapping("/")
     public String getHomepage() {
         return "Hello! Welcome to home page!";
     }
-
 
     @DeleteMapping("/admin/delete_product/{id}")
     public HttpStatus deleteProduct(@PathVariable Long id) {
@@ -31,12 +30,12 @@ public class ProductController {
         return HttpStatus.OK;
     }
 
-    @GetMapping("/user/get_product/{id}")
+    @GetMapping("/user_access/get_product/{id}")
     public Optional<Product> getProduct(@PathVariable Long id) {
         return productRepository.findById(id);
     }
 
-    @GetMapping("/user/test")
+    @GetMapping("/user_access/test")
     public String test() {
         return "test page!";
     }

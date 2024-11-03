@@ -6,6 +6,21 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<style>
+    .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 12px;
+    }
+</style>
 <div class="container">
     <h1>User Profile</h1>
     <div class="card">
@@ -14,7 +29,8 @@
             <p class="card-text"><strong>Name:</strong> <span th:text="${name}"></span></p>
             <p class="card-text"><strong>Login:</strong> <span th:text="${login}"></span></p>
             <p class="card-text"><strong>ID:</strong> <span th:text="${id}"></span></p>
-            <a th:href="@{/logout}" class="btn btn-danger">Logout</a>
+            <a href="/logout" class="button">Logout</a>
+            <a href="/" class="button">Back to homepage</a>
         </div>
     </div>
 </div>

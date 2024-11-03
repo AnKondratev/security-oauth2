@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ошибка</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             display: flex;
@@ -33,13 +32,11 @@
     </style>
 </head>
 <body>
-
 <div class="error-container">
     <h1>Произошла ошибка!</h1>
-    <p>К сожалению, что-то пошло не так.</p>
-    <p>Пожалуйста, попробуйте снова или вернитесь на главную страницу.</p>
-    <a href="/" class="btn btn-primary">На главную</a>
+    <p th:text="${errorMessage}">К сожалению, что-то пошло не так.</p>
+    <p>Пожалуйста, попробуйте снова или вернитесь на <a href="/">главную страницу</a>.</p>
 </div>
-
 </body>
 </html>
+

@@ -5,7 +5,6 @@ import na.kondratev.security_oauth2.model.Product;
 import na.kondratev.security_oauth2.repository.ProductRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -20,10 +19,6 @@ public class ProductController {
         return ResponseEntity.ok(productRepository.findAll());
     }
 
-    @GetMapping("/")
-    public String getHomepage() {
-        return "Hello! Welcome to home page!";
-    }
 
     @DeleteMapping("/admin/delete_product/{id}")
     public HttpStatus deleteProduct(@PathVariable Long id) {
@@ -36,7 +31,6 @@ public class ProductController {
         return productRepository.findById(id);
     }
 
-    @PreAuthorize("hasRole('USER')")
     @GetMapping("/user_access/test")
     public String test() {
         return "test page!";

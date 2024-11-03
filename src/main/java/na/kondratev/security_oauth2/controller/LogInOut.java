@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @AllArgsConstructor
 public class LogInOut {
 
+    @GetMapping("/")
+    public String getHomepage() {
+        return "start";
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login";

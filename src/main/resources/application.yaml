@@ -12,22 +12,26 @@ spring:
 
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://github.com
       client:
         registration:
           github:
             client-id: Ov23liuIuT49TXZ7qPnn
-            client-secret: 6a1e5073cdc72d8e7a2d26c2e5ec6cd580953cde
-            scope:
-              - user:email
-              - read:user
+            client-secret: d6dc00e380c26b97a378639ce42eed07e4caebc1
+            scope: read:user
+            authorization-grant-type: authorization_code
         provider:
           github:
             authorization-uri: https://github.com/login/oauth/authorize
             token-uri: https://github.com/login/oauth/access_token
             user-info-uri: https://api.github.com/user
+            user-name-attribute: id
 
 logging:
   file:
     name: logs/app.log
   level:
     root: INFO
+    na.alendronate.security_oauth2.service.SocialAppService: INFO

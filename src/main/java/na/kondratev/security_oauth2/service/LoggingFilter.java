@@ -23,4 +23,10 @@ public class LoggingFilter extends OncePerRequestFilter {
         logger.info("Request URI: {}", request.getRequestURI());
         filterChain.doFilter(request, response);
     }
+
+
+    public void logAuthenticationFailure(String username) {
+        logger.error("Authentication failed for user: {}", username);
+    }
+
 }

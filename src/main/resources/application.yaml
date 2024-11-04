@@ -21,17 +21,4 @@ spring:
             client-id: Ov23liuIuT49TXZ7qPnn
             client-secret: d6dc00e380c26b97a378639ce42eed07e4caebc1
             scope: read:user
-            authorization-grant-type: authorization_code
-        provider:
-          github:
-            authorization-uri: https://github.com/login/oauth/authorize
-            token-uri: https://github.com/login/oauth/access_token
-            user-info-uri: https://api.github.com/user
-            user-name-attribute: id
 
-logging:
-  file:
-    name: logs/app.log
-  level:
-    root: INFO
-    na.alendronate.security_oauth2.service.SocialAppService: INFO

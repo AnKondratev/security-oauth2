@@ -2,24 +2,22 @@ package na.kondratev.security_oauth2.service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import na.kondratev.security_oauth2.logger.GlobalLogger;
 import na.kondratev.security_oauth2.model.Users;
 import na.kondratev.security_oauth2.repository.UsersRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
-import java.security.SecureRandom;
+import org.apache.commons.text.CharacterPredicates;
+import org.apache.commons.text.RandomStringGenerator;
 
 @Service
 @AllArgsConstructor
 public class SocialAppService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UsersRepository userRepository;
-    private final LoggingFilter loggingFilter;
-    private static final Logger logger = LoggerFactory.getLogger(SocialAppService.class);
+    private final GlobalLogger logger;
 
     @Override
     @Transactional
@@ -29,7 +27,7 @@ public class SocialAppService implements OAuth2UserService<OAuth2UserRequest, OA
         try {
             oAuth2User = delegate.loadUser(userRequest);
         } catch (Exception e) {
-            loggingFilter.logAuthenticationFailure(userRequest.getClientRegistration().getRegistrationId());
+            logger.logInfo(userRequest.getClientRegistration().getRegistrationId());
             throw e;
         }
 
@@ -38,8 +36,7 @@ public class SocialAppService implements OAuth2UserService<OAuth2UserRequest, OA
         String login = oAuth2User.getAttribute("login");
 
         if (username == null) {
-            loggingFilter.logAuthenticationFailure("Username is null");
-            throw new RuntimeException("Authentication failed: Username is null.");
+            logger.logError("Authentication failed: Username is null.", new RuntimeException());
         }
 
         Users user = userRepository.findByLogin(login);
@@ -53,24 +50,22 @@ public class SocialAppService implements OAuth2UserService<OAuth2UserRequest, OA
                     .role("USER")
                     .build();
             userRepository.save(user);
-            logger.info("New user created: {}", username);
+            logger.logInfo("New user created: " + username);
         } else {
-            logger.info("User already exists: {}", username);
+            logger.logInfo("User already exists: " + username);
         }
 
         return oAuth2User;
     }
 
-    private String generateRandomPassword() {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
-        SecureRandom random = new SecureRandom();
-        StringBuilder password = new StringBuilder(10);
+    public String generateRandomPassword() {
+        RandomStringGenerator generator = new RandomStringGenerator.Builder()
+                .withinRange('0', 'z')
+                .filteredBy(CharacterPredicates.LETTERS,
+                        CharacterPredicates.DIGITS,
+                        CharacterPredicates.ASCII_UPPERCASE_LETTERS)
+                .build();
 
-        for (int i = 0; i < 10; i++) {
-            int index = random.nextInt(chars.length());
-            password.append(chars.charAt(index));
-        }
-
-        return password.toString();
+        return generator.generate(10);
     }
 }

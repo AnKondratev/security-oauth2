@@ -28,10 +28,12 @@ public class Users implements UserDetails {
     private String role;
     private String login;
     private String password;
+    @Transient
+    private String email;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(getRole()));
+        return Collections.singletonList(new SimpleGrantedAuthority(role));
     }
 
     @Override

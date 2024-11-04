@@ -12,10 +12,11 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
+
 @Service
 @AllArgsConstructor
 public class SocialAppService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-
     private final UsersRepository userRepository;
     private final LoggingFilter loggingFilter;
     private static final Logger logger = LoggerFactory.getLogger(SocialAppService.class);
@@ -24,7 +25,6 @@ public class SocialAppService implements OAuth2UserService<OAuth2UserRequest, OA
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
-
         OAuth2User oAuth2User;
         try {
             oAuth2User = delegate.loadUser(userRequest);
@@ -44,10 +44,12 @@ public class SocialAppService implements OAuth2UserService<OAuth2UserRequest, OA
 
         Users user = userRepository.findByLogin(login);
         if (user == null) {
+            String randomPassword = generateRandomPassword();
             user = Users.builder()
                     .username(username)
                     .login(login)
                     .githubId(githubId)
+                    .password(randomPassword)
                     .role("USER")
                     .build();
             userRepository.save(user);
@@ -59,4 +61,16 @@ public class SocialAppService implements OAuth2UserService<OAuth2UserRequest, OA
         return oAuth2User;
     }
 
+    private String generateRandomPassword() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder(10);
+
+        for (int i = 0; i < 10; i++) {
+            int index = random.nextInt(chars.length());
+            password.append(chars.charAt(index));
+        }
+
+        return password.toString();
+    }
 }

@@ -11,8 +11,13 @@ import java.util.Optional;
 
 @RestController()
 @AllArgsConstructor
-public class ProductController {
+public class ActionsController {
     private ProductRepository productRepository;
+
+    @GetMapping("/public/test")
+    public String publicTestPage() {
+        return "<h1>Public Test Page</h1>";
+    }
 
     @GetMapping("/public/products")
     public ResponseEntity<Object> getProducts() {
@@ -33,6 +38,6 @@ public class ProductController {
 
     @GetMapping("/user_access/test")
     public String test() {
-        return "test page!";
+        return "<h1>User Access Test page</h1>";
     }
 }

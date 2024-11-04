@@ -27,6 +27,7 @@ public class Users implements UserDetails {
     private Integer githubId;
     private String role;
     private String login;
+    private String password;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -40,7 +41,7 @@ public class Users implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
 }

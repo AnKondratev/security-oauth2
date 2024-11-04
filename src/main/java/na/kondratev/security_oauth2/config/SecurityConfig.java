@@ -1,8 +1,11 @@
 package na.kondratev.security_oauth2.config;
 
+import lombok.AllArgsConstructor;
 import na.kondratev.security_oauth2.service.SocialAppService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,12 +17,14 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
 
     @Bean
@@ -30,6 +35,10 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user_access/**").hasRole("USER")
                         .anyRequest().authenticated()
+                )
+                .oauth2ResourceServer(configuration -> configuration.jwt(Customizer.withDefaults()))
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )
                 .oauth2Login(oauth2Login -> oauth2Login
                         .loginPage("/login")
